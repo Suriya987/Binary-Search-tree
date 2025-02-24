@@ -30,7 +30,7 @@ Explanation: We find 7 in BST, so ceil of 6 is 7.
 
 Soln:
 
-cnt helper(Node* root, int input , int &num)
+int helper(Node* root, int input , int &num)
 {
     if(root==NULL)
      return -1;
