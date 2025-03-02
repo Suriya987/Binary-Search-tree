@@ -1,0 +1,103 @@
+Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference (possibly updated) of the BST.
+
+Basically, the deletion can be divided into two stages:
+
+Search for a node to remove.
+If the node is found, delete the node.
+ 
+
+Example 1:
+
+
+Input: root = [5,3,6,2,4,null,7], key = 3
+Output: [5,4,6,2,null,null,7]
+Explanation: Given key to delete is 3. So we find the node with value 3 and delete it.
+One valid answer is [5,4,6,2,null,null,7], shown in the above BST.
+Please notice that another valid answer is [5,2,6,null,4,null,7] and it's also accepted.
+
+Example 2:
+
+Input: root = [5,3,6,2,4,null,7], key = 0
+Output: [5,3,6,2,4,null,7]
+Explanation: The tree does not contain a node with value = 0.
+
+Example 3:
+Input: root = [], key = 0
+Output: []
+ 
+
+Soln:
+
+Time complexity : O(height of the tree)
+Space complexity : O(1)
+
+
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+          
+          //check for null in the root node
+          //check for the val where it is 
+          
+          if(root==NULL)
+            return root;
+
+          if((root->val==key && root->left==NULL )&& root->right==NULL)
+           return NULL;
+          
+         TreeNode* dummy = root;
+            //if the root is target node;
+            if(root->val==key)
+              return helper(root);
+            
+           //have the root before we lost it 
+            
+
+             while(root)
+             {
+                //key if smaller than root
+                 if(root->val > key)
+                 {
+                    if(root->left != NULL && root->left->val == key){
+                    root->left=helper(root->left); 
+                    break;
+                    }
+                    else
+                     root=root->left;
+                 }
+                 else 
+                 {      //key is greater than root
+                        if(root->right != NULL && root->right->val == key){
+                        root->right=helper(root->right); 
+                        break;
+                 }
+                        else
+                        root=root->right;
+                 }
+             }
+             return dummy;
+    }
+
+public:
+   TreeNode* helper(TreeNode* root)
+   {
+       if(root->left==NULL)
+         return root->right;
+       if(root->right==NULL)
+         return root->left;
+
+         TreeNode* tempRight=root->right;
+         TreeNode* lastRight=findLast(root->left);
+         lastRight->right=tempRight;
+         return root->left;
+   }
+
+public:
+  TreeNode* findLast(TreeNode* root)
+  {
+     if(root->right==NULL)
+       return root;
+    
+     return findLast(root->right);
+  }
+};
