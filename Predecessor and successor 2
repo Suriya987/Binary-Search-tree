@@ -1,0 +1,84 @@
+You are given root node of the BST and an integer key. You need to find the in-order successor and predecessor of the given key. If either predecessor or successor is not found, then set it to NULL.
+
+Note:- In an inorder traversal the number just smaller than the target is the predecessor and the number just greater than the target is the successor. 
+
+Examples :
+
+Input: root[] = [8, 1, 9, N, 4, N, 10, 3, N, N, N]
+      8
+    /   \
+   1     9
+   \      \
+    4      10
+   /
+  3
+key = 8
+Output: 4 9
+Explanation: In the given BST the inorder predecessor of 8 is 4 and inorder successor of 8 is 9.
+Input: root[] = [10, 2, 11, 1, 5, N, N, N, N, 3, 6, N, 4, N, N]
+      10
+    /   \
+   2     11
+  / \
+ 1   5
+    / \
+   3   6
+    \
+     4
+key = 11
+Output: 10 -1
+Explanation: In given BST, the inorder predecessor of 11 is 10 whereas it does not have any inorder successor.
+Input: root[] = [2, 1, 3]
+      2
+    /   \
+   1     3
+key = 3
+Output: 2 -1
+
+Soln:  { this soln will work for whether the key is in given node or not }
+
+Time compelxity : O(N)
+Space complexity : O(1)
+
+class Solution
+{
+public:
+    void helper(Node*root,Node*&pre,Node*&suc,int key , int &small, int &large)
+    {
+        if(root==NULL)  return;
+        
+       // if(small+1 == key && large-1==key)  return;
+          
+              //small
+              if(root->key>small && root->key<key)
+              {
+               small=root->key;
+               pre=new Node(small);
+              }
+              //large
+              if(root->key<large && root->key>key)
+              {
+              large=root->key;
+              suc=new Node(large);
+              }
+              
+           //we have to move left only we dont have any small which is on the right side
+           if(small==INT_MIN || (root->left!=NULL && root->left->key > small))
+           helper(root->left,pre,suc,key,small,large);
+           
+           if((large==INT_MAX) || (root->right!=NULL && root->right->key < large))
+           helper(root->right,pre,suc,key,small,large);
+        
+        
+    }         
+    public:
+    void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+    {
+           /*
+             1.  find the target node 
+             2. after find out , make 2 calls , for findsmall and findlarge
+           */
+           int find=0,small=INT_MIN,large=INT_MAX;
+           helper(root,pre,suc,key,small,large);
+    }
+};
